@@ -77,6 +77,7 @@ const AuthForm = () => {
         }
       ).then((res) => {
         if (res.ok) {
+          history.replace('/');
         } else {
           return res.json().then((data) => {
             alert(`${data.error.message}`);
