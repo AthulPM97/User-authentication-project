@@ -23,7 +23,6 @@ const AuthForm = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    console.log("clicked");
     setSignUp(false);
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
