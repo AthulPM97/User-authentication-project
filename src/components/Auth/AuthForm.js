@@ -1,10 +1,13 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
+import AuthContext from "../../Store/auth-context";
 
 import classes from "./AuthForm.module.css";
 
 const AuthForm = () => {
   //islogin true -> user exists / app is in login mode
   //islogin false -> user doesn't exist / app is not in login mode
+
+  const authCtx = useContext(AuthContext);
 
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
@@ -24,6 +27,8 @@ const AuthForm = () => {
     const enteredPassword = passwordInputRef.current.value;
     console.log(enteredEmail, enteredPassword);
 
+
+    //login mode 
     if (isLogin) {
       fetch("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyArRLtYWhRK3W2RZDhehWVkArZcfer995I",
       {
@@ -38,8 +43,11 @@ const AuthForm = () => {
         }
       }).then((response) => {
         if(response.ok) {
+          emailInputRef.current.value = '';
+          passwordInputRef.current.value = '';
           response.json().then(data => {
-            console.log(data.idToken);
+            authCtx.login(data.idToken)
+            console.log(authCtx);
           })
         } else {
           return response.json().then((data) => {
@@ -47,7 +55,10 @@ const AuthForm = () => {
           });
         }
       })
-    } else {
+    } 
+
+    //sign up mode
+    else {
       fetch(
         "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyArRLtYWhRK3W2RZDhehWVkArZcfer995I",
         {
